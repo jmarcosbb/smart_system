@@ -14,15 +14,17 @@
         <div class="text-center w-75">
             <h1 class="display-5 mb-5">Por favor, selecione o horário:</h1>
             
-            <div class="row">
+                <div class="row">
                 @foreach($horarios as $horario)
                     <div class="col-md-4">
                         @if($fluxo == 'embarcar')
+                            {{-- Botão para o fluxo de EMBARQUE --}}
                             <a href="{{ route('terminal.embarcar.opcoes', ['horario' => $horario]) }}" class="btn btn-primary btn-horario d-flex align-items-center justify-content-center">
                                 {{ $horario }}
                             </a>
-                        @else {{-- Fluxo é 'deixar-passageiro' --}}
-                            <a href="{{ route('terminal.saida.quantidade.com-horario', ['horario' => $horario, 'tipo' => 'deixar-passageiro']) }}" class="btn btn-info btn-horario d-flex align-items-center justify-content-center">
+                        @else
+                            {{-- Botão para o fluxo de DEIXAR PASSAGEIRO (agora com as classes corretas) --}}
+                            <a href="{{ route('terminal.saida.deixar-passageiro', ['horario' => $horario]) }}" class="btn btn-info btn-horario d-flex align-items-center justify-content-center">
                                 {{ $horario }}
                             </a>
                         @endif

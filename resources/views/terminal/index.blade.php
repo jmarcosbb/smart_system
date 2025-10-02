@@ -22,17 +22,17 @@
             <h1 class="display-4 mb-5">Por favor, selecione uma opção:</h1>
             
             {{-- Opção 1 --}}
-            <a href="{{ route('terminal.horario', ['fluxo' => 'embarcar']) }}" class="btn btn-primary ...">
+            <a href="{{ route('terminal.horario', ['fluxo' => 'embarcar']) }}" class="btn btn-primary btn-option d-flex align-items-center justify-content-center">
                 Irei embarcar neste veículo
             </a>
             
             {{-- Opção 2 --}}
-            <a href="{{ route('terminal.saida.quantidade.sem-horario', ['tipo' => 'nao-embarcar']) }}" class="btn btn-secondary ...">
+            <a href="{{ route('terminal.saida.nao-embarcar') }}" class="btn btn-secondary btn-option d-flex align-items-center justify-content-center">
                 Não irei embarcar
             </a>
 
             {{-- Opção 3 --}}
-            <a href="{{ route('terminal.horario', ['fluxo' => 'deixar-passageiro']) }}" class="btn btn-info ...">
+            <a href="{{ route('terminal.horario', ['fluxo' => 'deixar-passageiro']) }}" class="btn btn-info btn-option d-flex align-items-center justify-content-center">
                 Irei deixar passageiro(s) no terminal e não irei embarcar
             </a>
         </div>

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TerminalController;
+use App\Http\Controllers\PainelController;
 
 // Tela inicial
 Route::get('/', [TerminalController::class, 'index'])->name('terminal.index');
@@ -21,9 +22,10 @@ Route::post('/registrar-embarque', [TerminalController::class, 'registrarEmbarqu
 
 // --- FLUXO DE NÃO EMBARQUE (Opções 2 e 3) ---
 // Rota para a opção 2 (Não irei embarcar), que não tem horário
-Route::get('/saida/quantidade/nao-embarcar', [TerminalController::class, 'telaQuantidadeSaida'])->name('terminal.saida.quantidade.sem-horario');
+Route::get('/saida/nao-embarcar', [TerminalController::class, 'telaQuantidadeNaoEmbarcar'])->name('terminal.saida.nao-embarcar');
 
 // ROTA ATUALIZADA: Rota para a opção 3 (Deixar passageiro), que agora tem horário
-Route::get('/saida/quantidade/{horario}/deixar-passageiro', [TerminalController::class, 'telaQuantidadeSaida'])->name('terminal.saida.quantidade.com-horario');
+Route::get('/saida/deixar-passageiro/{horario}', [TerminalController::class, 'telaQuantidadeDeixarPassageiro'])->name('terminal.saida.deixar-passageiro');
 
 Route::post('/registrar-saida', [TerminalController::class, 'registrarSaida'])->name('terminal.saida.registrar');
+Route::get('/painel', [PainelController::class, 'index'])->name('painel.index');

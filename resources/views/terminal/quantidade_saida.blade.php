@@ -20,6 +20,13 @@
                 @csrf
                 <input type="hidden" name="tipo" value="{{ $tipo }}">
                 
+                {{-- ================= CORREÇÃO PRINCIPAL AQUI ================= --}}
+                {{-- Garante que o horário seja enviado junto com o formulário, se ele existir --}}
+                @if($horario)
+                    <input type="hidden" name="horario" value="{{ $horario }}">
+                @endif
+                {{-- ================= FIM DA CORREÇÃO ================= --}}
+                
                 <div class="mb-4">
                     <input type="number" name="quantidade" class="form-control form-control-lg" value="1" min="1" required>
                 </div>
@@ -27,7 +34,12 @@
                 <button type="submit" class="btn btn-success btn-confirm">Gerar Ticket</button>
             </form>
 
-            <a href="{{ route('terminal.index') }}" class="btn btn-link mt-4">Cancelar e Voltar</a>
+            {{-- O botão "Cancelar" agora volta para a tela de horários se houver um horário --}}
+            @if($horario)
+                <a href="{{ route('terminal.horario', ['fluxo' => 'deixar-passageiro']) }}" class="btn btn-link mt-4">Cancelar e Voltar</a>
+            @else
+                <a href="{{ route('terminal.index') }}" class="btn btn-link mt-4">Cancelar e Voltar</a>
+            @endif
         </div>
     </div>
 </body>
