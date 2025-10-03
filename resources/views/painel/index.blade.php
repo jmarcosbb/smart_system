@@ -9,13 +9,14 @@
         .table-sortable th a:hover { color: #FFF; }
         .ticket-font { font-size: 1.1em; color: #333; font-family: monospace; font-weight: bold; }
         .filter-btn .badge { margin-left: 8px; }
-        .table tfoot th { text-align: right; font-size: 1.1em; }
+        .table tfoot th { text-align: left; font-size: 1.1em; }
     </style>
 </head>
 <body>
     <div class="container-fluid my-4 px-4">
         <h1 class="mb-4">Painel de Monitoramento</h1>
 
+        {{-- Seção de Filtros --}}
         <div class="card mb-4">
             <div class="card-header"><h4>Filtrar Registros</h4></div>
             <div class="card-body">
@@ -34,11 +35,13 @@
                 <h5>Por Categoria de Embarque</h5>
                 @foreach($categoriasDisponiveis as $categoria)
                     @php
-                        $btnColor = 'btn-dark';
+                        $btnColor = 'btn-secondary'; // Cinza como padrão (para Veículos Pesados)
                         switch ($categoria) {
                             case 'com-passagem': $btnColor = 'btn-success'; break;
                             case 'sem-passagem': $btnColor = 'btn-warning text-dark'; break;
                             case 'prioridade-por-lei': $btnColor = 'btn-danger'; break;
+                            case 'motocicletas': $btnColor = 'btn-dark'; break;
+                            case 'vans-micro-onibus': $btnColor = 'btn-info'; break;
                         }
                     @endphp
                     <a href="{{ route('painel.index', ['categoria' => $categoria]) }}" class="btn {{ $btnColor }} mb-2 filter-btn">
@@ -47,16 +50,28 @@
                     </a>
                 @endforeach
                 <hr>
+
+                <h5>Por Horário</h5>
+                @foreach($horariosDisponiveis as $horario)
+                    {{-- 2. BOTÕES DE HORÁRIO ALTERADOS PARA AZUL --}}
+                    <a href="{{ route('painel.index', ['horario' => $horario]) }}" class="btn btn-info mb-2 filter-btn">
+                        {{ $horario }}
+                        <span class="badge bg-light text-dark">{{ $totais['horario'][$horario] ?? 0 }}</span>
+                    </a>
+                @endforeach
+                <hr>
                 
                 <a href="{{ route('painel.index') }}" class="btn btn-danger">Limpar Filtros</a>
             </div>
         </div>
 
+        {{-- Tabela de Registros --}}
         <h2>Registros</h2>
         <div class="table-responsive">
             <table class="table table-striped table-hover table-bordered table-sortable">
                  <thead class="table-dark">
-                    <tr>
+                    {{-- Cabeçalho com ordenação (sem alterações) --}}
+                     <tr>
                         <th>
                             @php $newDirection = ($sortBy == 'senha' && $direction == 'asc') ? 'desc' : 'asc'; @endphp
                             <a href="{{ route('painel.index', array_merge(request()->query(), ['sort_by' => 'senha', 'direction' => $newDirection])) }}">
@@ -84,7 +99,7 @@
                             </a>
                         </th>
                     </tr>
-                </thead>
+                 </thead>
                 <tbody>
                     @forelse($registros as $registro)
                         <tr>
@@ -94,11 +109,14 @@
                             <td>
                                 @if($registro->categoria_embarque)
                                     @php
-                                        $badgeColor = 'bg-secondary';
+                                        // 1. LÓGICA DE CORES DA TAG ATUALIZADA
+                                        $badgeColor = 'bg-secondary'; // Cinza como padrão
                                         switch ($registro->categoria_embarque) {
                                             case 'com-passagem': $badgeColor = 'bg-success'; break;
                                             case 'sem-passagem': $badgeColor = 'bg-warning text-dark'; break;
                                             case 'prioridade-por-lei': $badgeColor = 'bg-danger'; break;
+                                            case 'motocicletas': $badgeColor = 'bg-dark'; break;
+                                            case 'vans-micro-onibus': $badgeColor = 'bg-info text-dark'; break;
                                         }
                                     @endphp
                                     <span class="badge {{ $badgeColor }}">{{ ucwords(str_replace('-', ' ', $registro->categoria_embarque)) }}</span>
@@ -118,9 +136,10 @@
                 @if($registros->count() > 0)
                 <tfoot class="table-light">
                     <tr>
-                        <th colspan="4">TOTAIS DA VISUALIZAÇÃO ATUAL:</th>
-                        <th>{{ $totalPessoasFiltradas }} Pessoas</th>
-                        <th>{{ $totalRegistrosFiltrados }} Veículos</th>
+                        <th colspan="4" class="text-start">TOTAIS DA VISUALIZAÇÃO ATUAL:</th>
+                        <th class="text-start">{{ $totalPessoasFiltradas }} Pessoas</th>
+                        <th class="text-start">{{ $totalRegistrosFiltrados }} Veículos</th>
+                       
                     </tr>
                 </tfoot>
                 @endif
